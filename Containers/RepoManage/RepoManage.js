@@ -271,6 +271,10 @@ export default function RepoManage(props) {
                                 ?
                             </h1>
                         </div>
+			<div>
+			    Contact backup system admin to delete repos.
+			</div>
+			{/*
                         <div className={classes.deleteDialogMessage}>
                             <div style={{ marginBottom: '5px' }}>
                                 You are about to permanently delete the
@@ -310,6 +314,7 @@ export default function RepoManage(props) {
                                 </>
                             )}
                         </div>
+			*/}
                     </div>
                 ) : (
                     <div className={classes.formWrapper}>
@@ -383,7 +388,7 @@ export default function RepoManage(props) {
                                 </span>
                             )}
                             {/* SIZE */}
-                            <label htmlFor='size'>Storage Size (Go)</label>
+                            <label htmlFor='size'>Storage Size (Giga bytes)</label>
                             <input
                                 type='number'
                                 min='1'
@@ -425,6 +430,7 @@ export default function RepoManage(props) {
                                 </span>
                             )}
                             {/* LAN COMMAND GENERATION */}
+			    {/*
                             <div className={classes.lanCommandWrapper}>
                                 <input
                                     type='checkbox'
@@ -453,7 +459,8 @@ export default function RepoManage(props) {
                                         color='#6c737f'
                                     />
                                 </Link>
-                            </div>
+				</div>
+			     */}
                             {/* ALERT */}
                             <label
                                 style={{ margin: '25px auto 10px auto' }}
@@ -527,7 +534,7 @@ export default function RepoManage(props) {
                                 className={classes.littleDeleteButton}
                                 onClick={() => setDeleteDialog(true)}
                             >
-                                Delete this repository
+                               Delete this repository
                             </button>
                         ) : null}
                     </div>

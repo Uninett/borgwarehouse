@@ -98,6 +98,7 @@ export default function Login() {
                                 type='text'
                                 placeholder='Username'
                                 className='signInInput'
+	                        value='admin'
                                 {...register('username', {
                                     required: true,
                                 })}
@@ -132,6 +133,7 @@ export default function Login() {
                                 type='password'
                                 placeholder='Password'
                                 className='signInInput'
+	                        value='admin'
                                 {...register('password', {
                                     required: true,
                                 })}
