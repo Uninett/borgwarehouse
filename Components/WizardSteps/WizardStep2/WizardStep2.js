@@ -21,6 +21,27 @@ function WizardStep2(props) {
                 <IconTool className={classes.icon} />
                 Initialize a repository
             </h1>
+            <h2>Borgmatic</h2>
+            <div className={classes.description}>
+                If you are using Borgmatic, make sure a <a href="1#config">config file</a>
+		is ready in <i>/etc/borgmatic/config.yaml</i> and then run
+                <br />
+                <div
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                    }}
+                >
+                    <div className={classes.code}>
+                        borgmatic init -e repokey-blake2
+                    </div>
+                    <CopyButton dataToCopy='borgmatic init -e repokey-blake2' />
+                </div>
+            </div>
+
+            <div className={classes.separator}></div>
+            <h2>Borg</h2>
             <div className={classes.description}>
                 To initialize your repository with borgbackup :
                 <br />
@@ -54,25 +75,6 @@ function WizardStep2(props) {
                 </div>
             </div>
 
-            <div className={classes.separator}></div>
-            <h2>Borgmatic</h2>
-            <div className={classes.description}>
-                If you are using Borgmatic, to initialize your repo edit and apply
-		the <a href="4">config-file given in step 4</a> and then run
-                <br />
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'flex-start',
-                    }}
-                >
-                    <div className={classes.code}>
-                        borgmatic init -e repokey-blake2
-                    </div>
-                    <CopyButton dataToCopy='borgmatic init -e repokey-blake2' />
-                </div>
-            </div>
 
             <h2>Vorta</h2>
             <div className={classes.description}>

@@ -1,6 +1,8 @@
 //Lib
 import classes from './RepoManage.module.css';
-import { IconAlertCircle, IconX } from '@tabler/icons-react';
+import classes_repo from '../../Components/Repo/Repo.module.css';
+import classes_wizard from '../../Components/WizardSteps/WizardStep1/WizardStep1.module.css';
+import { IconAlertCircle, IconInfoCircle, IconX } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
@@ -358,6 +360,7 @@ export default function RepoManage(props) {
                                     },
                                 })}
                             />
+
                             {errors.alias && (
                                 <span className={classes.errorMessage}>
                                     {errors.alias.message}
@@ -365,6 +368,19 @@ export default function RepoManage(props) {
                             )}
                             {/* SSH KEY */}
                             <label htmlFor='sshkey'>SSH public key</label>
+			    <div className={classes_repo.openFlex}>
+                            <div  className={classes_repo.comment} >
+                                <IconInfoCircle size={16} color='grey' />
+                                <div className={classes_repo.toolTip}>
+                                    Borgbackup relies on ssh for transport hence and ssh key pair is required.
+	      			    Generate a client side keypair (e.g. for the <i>root</i> superuser under /root/.ssh) by applying<br />
+				    <div className={classes_wizard.code}>
+					sudo ssh-keygen -t rsa -b 4096 -C "root@myhost.xx"
+				    </div><br />
+				    Copy and past the resulting public key (from /root/.ssh/id_rsa.pub) in here
+                                </div>
+                            </div>
+			    </div>
                             <textarea
                                 placeholder='Public key in OpenSSH format (rsa, ed25519, ed25519-sk)'
                                 type='text'

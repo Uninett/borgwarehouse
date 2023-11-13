@@ -22,7 +22,24 @@ function WizardStep3(props) {
                 Launch a backup
             </h1>
             <div className={classes.description}>
-                To launch a backup with borgbackup :
+                To launch a backup with <b>borgmatic</b> just run:
+                <div
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                    }}
+                >
+                    <div className={classes.code}>
+                        borgmatic
+                    </div>
+                    <CopyButton
+                        dataToCopy={`borgmatic`}
+                    />
+                </div>
+            </div>
+            <div className={classes.description}>
+                To launch with <b>borg</b> adapt <i>/your/pathToBackup</i> and run:
                 <div
                     style={{
                         display: 'flex',
@@ -63,11 +80,87 @@ function WizardStep3(props) {
                 <br />
             </div>
 
+            <h2>Borgmatic</h2>
+            <div className={classes.description}>
+                When you are using Borgmatic, regular consistency checks can be specified in the config file. See {' '}
+                <a
+                    href='https://torsion.org/borgmatic/docs/how-to/deal-with-very-large-backups/#consistency-check-configuration'
+                    rel='noreferrer'
+                    target='_blank'
+                >
+                    full documentation on for checks.
+                </a>
+            </div>
+            <br />
+	    
+            <li>Check the integrity of a repository with :</li>
+            <div
+                style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                }}
+            >
+                <div className={classes.code}>
+                    borgmatic check
+                </div>
+                <CopyButton
+                    dataToCopy={`borgmatic check`}
+                />
+            </div>
+            <li>List the remote archives with :</li>
+            <div
+                style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                }}
+            >
+                <div className={classes.code}>
+                    borgmatic list 
+                </div>
+                <CopyButton
+                    dataToCopy={`borgmatic list`}
+                />
+            </div>
+            <li>List all files in latest archive with :</li>
+            <div
+                style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                    }}
+                >
+                    <div className={classes.code}>
+                        borgmatic list --archive latest
+                    </div>
+                    <CopyButton
+                        dataToCopy={`borgmatic list --archive latest`}
+                    />
+            </div>
+            <li>Download latest archive with the following command :</li>
+            <div
+                style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                }}
+            >
+                <div className={classes.code}>
+                    borgmatic extract --archive latest --destination /path/to/destination/folder
+                </div>
+                <CopyButton
+                    dataToCopy={`borgmatic extract --archive latest --destination /path/to/destination/folder`}
+                />
+            </div>
+	    <div className={classes.separator}></div>
+	    <h2>Borg</h2>
             <span className={classes.description}>
                 Based on the Borg documentation, you have multiple ways to check
                 that your backups are correct with your tools (tar, rsync, diff
                 or other tools).
                 <br />
+		
                 <li>Check the integrity of a repository with :</li>
                 <div
                     style={{
@@ -153,18 +246,6 @@ function WizardStep3(props) {
                 </a>
             </span>
             <div className={classes.separator}></div>
-            <h2>Borgmatic</h2>
-            <div className={classes.description}>
-                If you are using Borgmatic, please refer to{' '}
-                <a
-                    href='https://torsion.org/borgmatic/docs/how-to/deal-with-very-large-backups/#consistency-check-configuration'
-                    rel='noreferrer'
-                    target='_blank'
-                >
-                    this documentation
-                </a>{' '}
-                for a consistency check.
-            </div>
             <h2>Vorta</h2>
             <div className={classes.description}>
                 If you are using the Vorta graphical client, please refer to{' '}

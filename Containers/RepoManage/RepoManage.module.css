@@ -266,3 +266,9 @@
     margin: auto auto 35px auto;
     max-width: 160px;
 }
+
+.comment {
+    display: inline-block;
+    align-items: center;
+    margin-left: 10px;
+}
