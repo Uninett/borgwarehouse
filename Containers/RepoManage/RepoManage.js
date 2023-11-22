@@ -49,6 +49,8 @@ export default function RepoManage(props) {
         progress: undefined,
     };
 
+    const sshkeygen_cmd ='sudo ssh-keygen -q -t rsa -b 4096 -N "" -C "root@$(hostname --fqdn)" <<< $\'\\ny\' >/dev/null 2>&1'
+    
     ////State
     const [deleteDialog, setDeleteDialog] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -315,8 +317,8 @@ export default function RepoManage(props) {
                                     </button>
                                 </>
                             )}
-                        </div>
-			*/}
+                            </div>
+			 */}
                     </div>
                 ) : (
                     <div className={classes.formWrapper}>
@@ -373,11 +375,11 @@ export default function RepoManage(props) {
                                 <IconInfoCircle size={16} color='grey' />
                                 <div className={classes_repo.toolTip}>
                                     Borgbackup relies on ssh for transport hence and ssh key pair is required.
-	      			    Generate a client side keypair (e.g. for the <i>root</i> superuser under /root/.ssh) by applying<br />
+	      			    Generate a client side keypair for the <i>root</i> (in /root/.ssh) by applying<br />
 				    <div className={classes_wizard.code}>
-					sudo ssh-keygen -t rsa -b 4096 -C "root@myhost.xx"
+					{sshkeygen_cmd}
 				    </div><br />
-				    Copy and past the resulting public key (from /root/.ssh/id_rsa.pub) in here
+				    Copy and past the resulting public key found in <i>/root/.ssh/id_rsa.pub</i> in here
                                 </div>
                             </div>
 			    </div>

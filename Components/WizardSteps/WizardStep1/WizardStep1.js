@@ -1,5 +1,8 @@
 //Lib
 import React from 'react';
+
+import { useState } from 'react';
+
 import classes from '../WizardStep1/WizardStep1.module.css';
 import { IconDeviceDesktopAnalytics, IconTerminal2 } from '@tabler/icons-react';
 import CopyButton from '../../UI/CopyButton/CopyButton';
@@ -45,7 +48,7 @@ storage:
         /bin/bash -c "if [ -f /etc/borgmatic/${props.selectedOption.repositoryName}-repo.key ]; then
            cat /etc/borgmatic/${props.selectedOption.repositoryName}-repo.key;
         else
-           pwgen 40 1 | tee /etc/borgmatic/${props.selectedOption.repositoryName}-repo.key;
+           openssl rand -base64 40 | tee /etc/borgmatic/${props.selectedOption.repositoryName}-repo.key;
            chmod 400 /etc/borgmatic/${props.selectedOption.repositoryName}-repo.key;
         fi"
 
@@ -64,7 +67,23 @@ consistency:
         - repository
         - archives
     prefix: '{fqdn}-backup-'
+
+#hooks:
+    # Database hooks may not notavailable in all bormatic version.
+    # Run 'generate-borgmatic-config --destination /tmp/config.yaml' to check if such hooks are supported.
+    #mysql_databases:
+      #- name: my-database-no-1
+        #hostname: localhost
+        #port: 3306
+        #username: root
+        #password: <none-as-root-is-trusted-user>
+        #options: --skip-comments
+      #- name: my-database-no-2
+
 `;
+
+    // Selectbox-states for OS
+    const [selectedOS, setSelectedOS] = useState('');
 
     return (
         <div className={classes.container}>
@@ -82,40 +101,92 @@ consistency:
             <div className={classes.description}>
 		For more all-in-one management of backups install <b>borgmatic</b> on client side.<br/> 
 		Note that borgmatic runs <b>borg</b> under-the-hood. <br/>
-		(See <a href='https://torsion.org/borgmatic/docs/how-to/set-up-backups/'>
-		detailed installation instructions</a>.)
-		
-		<li>Debian / Ubuntu&nbsp;
-		<div
+
+		<div>
+		    
+		    <select value={selectedOS} onChange={e => setSelectedOS(e.target.value)} >
+			<option value="">Select OS ...</option>
+			<option value="deb11">Debian 11+</option>
+			<option value="ubuntu2004">Ubuntu 20.04+</option>
+			<option value="redhat">Redhat</option>
+			<option value="netbsd">NetBSD</option>
+			<option value="macos">Mac OS</option>
+		    </select>
+		    
+		    <div
+			style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'flex-start',
+			}}
+                    >
+			{ ( selectedOS == 'deb11' || selectedOS == 'ubuntu2004' ) &&
+			  <>
+			      <div className={classes.code}>
+				  sudo apt install borgmatic
+			      </div>
+			      <CopyButton
+				  dataToCopy={`sudo apt install borgmatic`}
+			      />
+			  </>}
+			{ ( selectedOS == 'redhat' ) &&
+			  <>
+			      <div className={classes.code}>
+				  sudo dnf install borgmatic
+			      </div>
+			      <CopyButton
+				  dataToCopy={`sudo dnf install borgmatic`}
+			      />
+			  </>}
+			{ ( selectedOS == 'netbsd' ) &&
+			  <>
+			      <p>(To be added)</p>
+			  </>}
+			{ ( selectedOS == 'macos' ) &&
+			  <>
+			      Make sure the <a href="https://brew.sh/"> Homebrew package manager </a> is installed and apply 
+			      <div className={classes.code}>
+				  brew install borgmatic
+			      </div>
+			      <CopyButton
+				  dataToCopy={`brew install borgmatic`}
+			      />
+			  </>}
+                    </div>
+                </div>
+		    
+		{/*    
+		<li>Debian 11+/ Ubuntu 20.04+&nbsp;
+		    <div
                     style={{
                         display: 'flex',
                         flexDirection: 'row',
                         justifyContent: 'flex-start',
                     }}
-                >
-                    <div className={classes.code}>
-                        sudo apt install borgmatic
+                    >
+			<div className={classes.code}>
+                            sudo apt install borgmatic
+			</div>
+			<CopyButton
+                            dataToCopy={`sudo apt install borgmatic`}
+			/>
                     </div>
-                    <CopyButton
-                        dataToCopy={`sudo apt install borgmatic`}
-                    />
-                </div>
 		</li>
 		<li>Redhat<br />
-		<div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'flex-start',
-                    }}
-                >
-                    <div className={classes.code}>
-                        sudo dnf install borgmatic
+		    <div
+			style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'flex-start',
+			}}
+                    >
+			<div className={classes.code}>
+                            sudo dnf install borgmatic
+			</div>
+			<CopyButton
+                            dataToCopy={`sudo dnf install borgmatic`}
+			/>
                     </div>
-                    <CopyButton
-                        dataToCopy={`sudo dnf install borgmatic`}
-                    />
-                </div>
 		</li>
 		<li>NetBSD<br />
 		<div
@@ -144,7 +215,12 @@ consistency:
                     />
                 </div>
 		</li>
+		 */}
+		<p>(See <a href='https://torsion.org/borgmatic/docs/how-to/set-up-backups/'>
+			 detailed installation instructions</a>.)</p>
 	    </div>
+
+
 	    <h3 name="config">Create config file</h3>
 	    
 	    <p>Copy the yaml configuration given below into <i>/etc/borgmatic/config.yaml</i> on your client.<br/>
@@ -171,7 +247,8 @@ consistency:
 		
             </div>
 	    <div className={classes.description}>
-		<b>Note</b> that the config file will create (and later apply) a secret repo-key which is stored in <i>/etc/borgmatic/{props.selectedOption.repositoryName}-repo.key</i>.
+		<p><b>Note</b> that the config file will create (and later apply) a secret repo-key which is stored in <i>/etc/borgmatic/{props.selectedOption.repositoryName}-repo.key</i>.</p>
+		<p>Full <a href="https://torsion.org/borgmatic/docs/reference/configuration/">documentation of all config options</a> is available via the official borgmatic website.</p> 
 	    </div>
             <h2>
                 Install basic <i>borg</i> backup client
