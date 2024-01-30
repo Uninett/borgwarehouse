@@ -4,6 +4,9 @@
 # This shell takes 1 arg : [repositoryName] with 8 char. length only.
 # This shell **delete the repository** in arg and **all his data** and the line associated in the authorized_keys file.
 
+# DISABLED (until authentiation is improved) 2024-01-30 Otto J Wittner
+echo "This feature is disabled"; exit 1
+
 # Exit when any command fails
 set -e
 

@@ -140,7 +140,7 @@ consistency:
 			  </>}
 			{ ( selectedOS == 'netbsd' ) &&
 			  <>
-			      <p>(To be added)</p>
+			      <p> Apply "borg" (see below)</p>
 			  </>}
 			{ ( selectedOS == 'macos' ) &&
 			  <>
@@ -216,40 +216,48 @@ consistency:
                 </div>
 		</li>
 		 */}
-		<p>(See <a href='https://torsion.org/borgmatic/docs/how-to/set-up-backups/'>
-			 detailed installation instructions</a>.)</p>
-	    </div>
+		{ ( selectedOS != 'netbsd' ) &&
+		  <>
+		      <p>(See <a href='https://torsion.org/borgmatic/docs/how-to/set-up-backups/'>
+			      detailed installation instructions</a>.)</p>
+	          </> }
+	  </div>
 
-
-	    <h3 name="config">Create config file</h3>
+	     { ( selectedOS != 'netbsd' ) &&
+	       <>
+	
+		   <h3 name="config">Create config file</h3>
 	    
-	    <p>Copy the yaml configuration given below into <i>/etc/borgmatic/config.yaml</i> on your client.<br/>
-	    <i><b>Important:</b></i> Make sure to adjust the list of folders and files to include
-	    in backups specified under <i>source_dirctories:</i> as well as the list of <i>exclude_patterns:</i></p>
-	    <p><b>Note:</b> Make sure to <a href="/manage-repo/add">create</a> and select (top of page) a repository before copying config.</p>
-            <div 
-                style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'flex-start',
-                }}
-            >
-                <div className={classes.code}>{configBorgmatic}</div>
-                <div
-                    style={{
-                        margin: '15px 0 auto 0',
-                        display: 'flex',
-                        alignContent: 'center',
-                    }}
-                >
-                    <CopyButton dataToCopy={configBorgmatic} size={32} />
-                </div>
-		
-            </div>
-	    <div className={classes.description}>
-		<p><b>Note</b> that the config file will create (and later apply) a secret repo-key which is stored in <i>/etc/borgmatic/{props.selectedOption.repositoryName}-repo.key</i>.</p>
-		<p>Full <a href="https://torsion.org/borgmatic/docs/reference/configuration/">documentation of all config options</a> is available via the official borgmatic website.</p> 
-	    </div>
+		   <p>Copy the yaml configuration given below into <i>/etc/borgmatic/config.yaml</i> on your client.<br/>
+		       <i><b>Important:</b></i> Make sure to adjust the list of folders and files to include
+		   in backups specified under <i>source_dirctories:</i> as well as the list of <i>exclude_patterns:</i></p>
+		   <p><b>Note:</b> Make sure to <a href="/manage-repo/add">create</a> and select (top of page) a repository before copying config.</p>
+		   <div 
+                       style={{
+			   display: 'flex',
+			   flexDirection: 'row',
+			   justifyContent: 'flex-start',
+                       }}
+		   >
+                       <div className={classes.code}>{configBorgmatic}</div>
+                       <div
+			   style={{
+                               margin: '15px 0 auto 0',
+                               display: 'flex',
+                               alignContent: 'center',
+			   }}
+                       >
+			   <CopyButton dataToCopy={configBorgmatic} size={32} />
+                       </div>
+		       
+		   </div>
+		   <div className={classes.description}>
+		       <p><b>Note</b> that the config file will create (and later apply) a secret repo-key which is stored in <i>/etc/borgmatic/{props.selectedOption.repositoryName}-repo.key</i>.</p>
+		       <p>Full <a href="https://torsion.org/borgmatic/docs/reference/configuration/">documentation of all config options</a> is available via the official borgmatic website.</p> 
+		   </div>
+		   
+	       </> }
+
             <h2>
                 Install basic <i>borg</i> backup client
             </h2>

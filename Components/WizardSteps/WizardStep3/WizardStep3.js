@@ -48,13 +48,14 @@ function WizardStep3(props) {
                     }}
                 >
                     <div className={classes.code}>
-                        borg create ssh://
+                        BORG_PASSPHRASE=`cat /etc/borg/{props.selectedOption.repositoryName}-repo.key`
+			borg create ssh://
                         {UNIX_USER}@{FQDN}:{SSH_SERVER_PORT}/./
                         {props.selectedOption.repositoryName}
-                        ::archive1 /your/pathToBackup
+                        ::{"{hostname}-{user}-{now}"} /your/pathToBackup
                     </div>
                     <CopyButton
-                        dataToCopy={`borg create ssh://${UNIX_USER}@${FQDN}:${SSH_SERVER_PORT}/./${props.selectedOption.repositoryName}::archive1 /your/pathToBackup`}
+                        dataToCopy={`BORG_PASSPHRASE=\`cat /etc/borg/${props.selectedOption.repositoryName}-repo.key\` borg create ssh://${UNIX_USER}@${FQDN}:${SSH_SERVER_PORT}/./${props.selectedOption.repositoryName}::\{hostname\}-\{user\}-\{now\} /your/pathToBackup`}
                     />
                 </div>
             </div>
@@ -170,12 +171,13 @@ function WizardStep3(props) {
                     }}
                 >
                     <div className={classes.code}>
+			BORG_PASSPHRASE=`cat /etc/borg/{props.selectedOption.repositoryName}-repo.key`
                         borg check -v --progress ssh://
                         {UNIX_USER}@{FQDN}:{SSH_SERVER_PORT}/./
                         {props.selectedOption.repositoryName}
                     </div>
                     <CopyButton
-                        dataToCopy={`borg check -v --progress ssh://${UNIX_USER}@${FQDN}:${SSH_SERVER_PORT}/./${props.selectedOption.repositoryName}`}
+                        dataToCopy={`BORG_PASSPHRASE=\`cat /etc/borg/${props.selectedOption.repositoryName}-repo.key\` borg check -v --progress ssh://${UNIX_USER}@${FQDN}:${SSH_SERVER_PORT}/./${props.selectedOption.repositoryName}`}
                     />
                 </div>
                 <li>List the remote archives with :</li>
@@ -187,15 +189,16 @@ function WizardStep3(props) {
                     }}
                 >
                     <div className={classes.code}>
+			BORG_PASSPHRASE=`cat /etc/borg/{props.selectedOption.repositoryName}-repo.key`
                         borg list ssh://
                         {UNIX_USER}@{FQDN}:{SSH_SERVER_PORT}/./
                         {props.selectedOption.repositoryName}
                     </div>
                     <CopyButton
-                        dataToCopy={`borg list ssh://${UNIX_USER}@${FQDN}:${SSH_SERVER_PORT}/./${props.selectedOption.repositoryName}`}
+                        dataToCopy={`BORG_PASSPHRASE=\`cat /etc/borg/${props.selectedOption.repositoryName}-repo.key\` borg list ssh://${UNIX_USER}@${FQDN}:${SSH_SERVER_PORT}/./${props.selectedOption.repositoryName}`}
                     />
                 </div>
-                <li>Download a remote archive with the following command :</li>
+                <li>Download a remote archive (adapt 'archive-name') with the following command :</li>
                 <div
                     style={{
                         display: 'flex',
@@ -204,17 +207,18 @@ function WizardStep3(props) {
                     }}
                 >
                     <div className={classes.code}>
+                        BORG_PASSPHRASE=`cat /etc/borg/{props.selectedOption.repositoryName}-repo.key`                                                                                
                         borg export-tar --tar-filter="gzip -9" ssh://
                         {UNIX_USER}@{FQDN}:{SSH_SERVER_PORT}/./
                         {props.selectedOption.repositoryName}
-                        ::archive1 archive1.tar.gz
+                        ::archive-name archive-name.tar.gz
                     </div>
                     <CopyButton
-                        dataToCopy={`borg export-tar --tar-filter="gzip -9" ssh://${UNIX_USER}@${FQDN}:${SSH_SERVER_PORT}/./${props.selectedOption.repositoryName}::archive1 archive1.tar.gz`}
+                        dataToCopy={`BORG_PASSPHRASE=\`cat /etc/borg/${props.selectedOption.repositoryName}-repo.key\` borg export-tar --tar-filter="gzip -9" ssh://${UNIX_USER}@${FQDN}:${SSH_SERVER_PORT}/./${props.selectedOption.repositoryName}::archive-name archive-name.tar.gz`}
                     />
                 </div>
                 <li>
-                    Mount an archive to compare or backup some files without
+                    Mount an archive (adapt 'archive-name') to compare or backup some files without
                     download all the archive :
                 </li>
                 <div
@@ -225,13 +229,14 @@ function WizardStep3(props) {
                     }}
                 >
                     <div className={classes.code}>
+			BORG_PASSPHRASE=`cat /etc/borg/{props.selectedOption.repositoryName}-repo.key`
                         borg mount ssh://
                         {UNIX_USER}@{FQDN}:{SSH_SERVER_PORT}/./
                         {props.selectedOption.repositoryName}
-                        ::archive1 /tmp/yourMountPoint
+                        ::archive-name /tmp/yourMountPoint
                     </div>
                     <CopyButton
-                        dataToCopy={`borg mount ssh://${UNIX_USER}@${FQDN}:${SSH_SERVER_PORT}/./${props.selectedOption.repositoryName}::archive1 /tmp/yourMountPoint`}
+                        dataToCopy={`BORG_PASSPHRASE=\`cat /etc/borg/${props.selectedOption.repositoryName}-repo.key\` borg mount ssh://${UNIX_USER}@${FQDN}:${SSH_SERVER_PORT}/./${props.selectedOption.repositoryName}::archive-name /tmp/yourMountPoint`}
                     />
                 </div>
                 <br />

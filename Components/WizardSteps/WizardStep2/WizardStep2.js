@@ -53,12 +53,14 @@ function WizardStep2(props) {
                     }}
                 >
                     <div className={classes.code}>
-                        borg init -e repokey-blake2 ssh://
+                        BORG_NEW_PASSPHRASE=`mkdir -p /etc/borg; openssl rand -base64 40 |
+			tee /etc/borg/{props.selectedOption.repositoryName}-repo.key` \ <br/>
+			borg init -e repokey-blake2 ssh://
                         {UNIX_USER}@{FQDN}:{SSH_SERVER_PORT}/./
                         {props.selectedOption.repositoryName}
                     </div>
                     <CopyButton
-                        dataToCopy={`borg init -e repokey-blake2 ssh://${UNIX_USER}@${FQDN}:${SSH_SERVER_PORT}/./${props.selectedOption.repositoryName}`}
+                        dataToCopy={`BORG_NEW_PASSPHRASE=\`mkdir -p /etc/borg; openssl rand -base64 40 | tee /etc/borg/${props.selectedOption.repositoryName}-repo.key\` borg init -e repokey-blake2 ssh://${UNIX_USER}@${FQDN}:${SSH_SERVER_PORT}/./${props.selectedOption.repositoryName}`}
                     />
                 </div>
                 <div className={classes.note}>

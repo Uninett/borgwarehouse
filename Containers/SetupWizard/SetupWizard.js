@@ -152,8 +152,8 @@ function SetupWizard(props) {
                         },
                     })}
                 />
+		or <a href="/manage-repo/add">add a new repository</a> 
             </div>
-
             {wizardStep(step)}
         </div>
     );
