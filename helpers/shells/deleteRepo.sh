@@ -5,7 +5,7 @@
 # This shell **delete the repository** in arg and **all his data** and the line associated in the authorized_keys file.
 
 # DISABLED (until authentiation is improved) 2024-01-30 Otto J Wittner
-if [ $1 != "cf832277" ]; then
+if [ $1 != "add-reponame-to-delete-here" ]; then
     echo -n "This feature is disabled"; exit 2
 fi
 # Exit when any command fails
