@@ -41,14 +41,14 @@ fi
 # Delete the repository and the line associated in the authorized_keys file
 if [ -d "${pool}/${repositoryName}" ]; then
         # Delete the repository
-        rm -rf "${pool}/${repositoryName}"
+        rm -rf """${pool}""/""${repositoryName:?}"""
         # Delete the line in the authorized_keys file
         sed -i "/${repositoryName}/d" "${authorized_keys}"
-        echo -n "The folder "${pool}/${repositoryName}" and all its data have been deleted. The line associated in the authorized_keys file has been deleted."
+        echo -n "The folder ""${pool}"/"${repositoryName}"" and all its data have been deleted. The line associated in the authorized_keys file has been deleted."
 else
         # Delete the line in the authorized_keys file
         sed -i "/${repositoryName}/d" "${authorized_keys}"
-        echo -n "The folder "${pool}/${repositoryName}" did not exist (repository never initialized or used). The line associated in the authorized_keys file has been deleted."
+        echo -n "The folder ""${pool}"/"${repositoryName}"" did not exist (repository never initialized or used). The line associated in the authorized_keys file has been deleted."
 fi
 
 HOSTNAME=$2
@@ -61,3 +61,4 @@ if [ $HOSTNAME ]; then
     # Run ufw command
     bash -c "$UFW_CMD" 2>&1 >/dev/null
 fi
+
