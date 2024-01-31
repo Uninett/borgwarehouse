@@ -47,8 +47,9 @@ export default async function handler(req, res) {
             //Find the absolute path of the shells directory
             const shellsDirectory = path.join(process.cwd(), '/helpers');
             //Exec the shell
+	    // (Include alias to trigger firewall clean-up if alias is a FQDN)
             const { stdout, stderr } = await exec(
-                `${shellsDirectory}/shells/deleteRepo.sh ${repoList[indexToDelete].repositoryName}`
+                `${shellsDirectory}/shells/deleteRepo.sh ${repoList[indexToDelete].repositoryName} ${repoList[indexToDelete].alias}`
             );
             if (stderr) {
                 console.log('stderr:', stderr);

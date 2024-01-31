@@ -5,8 +5,9 @@
 # This shell **delete the repository** in arg and **all his data** and the line associated in the authorized_keys file.
 
 # DISABLED (until authentiation is improved) 2024-01-30 Otto J Wittner
-echo "This feature is disabled"; exit 1
-
+if [ $1 != "cf832277" ]; then
+    echo -n "This feature is disabled"; exit 2
+fi
 # Exit when any command fails
 set -e
 
@@ -23,7 +24,8 @@ pool="${home}/repos"
 authorized_keys="${home}/.ssh/authorized_keys"
 
 # Check arg
-if [[ $# -ne 1 || $1 = "" ]]; then
+#if [[ $# -ne 1 || $1 = "" ]]; then
+if [[ $# -lt 1 || $1 = "" ]]; then
     echo -n "You must provide a repositoryName in argument."
     exit 1
 fi
@@ -47,4 +49,15 @@ else
         # Delete the line in the authorized_keys file
         sed -i "/${repositoryName}/d" "${authorized_keys}"
         echo -n "The folder "${pool}/${repositoryName}" did not exist (repository never initialized or used). The line associated in the authorized_keys file has been deleted."
+fi
+
+HOSTNAME=$2
+# Clean up firewall if client hostname is given
+if [ $HOSTNAME ]; then
+    RULENUMS=`sudo ufw status numbered | grep "SSH from $HOSTNAME" | cut -f2 -d "[" | cut -f1 -d"]" | sort -nr`
+    for r in $RULENUMS; do
+	UFW_CMD="$UFW_CMD sudo ufw --force delete $r; "
+    done
+    # Run ufw command
+    bash -c "$UFW_CMD" 2>&1 >/dev/null
 fi

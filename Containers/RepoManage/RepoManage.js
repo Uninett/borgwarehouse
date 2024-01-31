@@ -275,10 +275,11 @@ export default function RepoManage(props) {
                                 ?
                             </h1>
                         </div>
+			{/*
 			<div>
 			    Contact backup system admin to delete repos.
-			</div>
-			{/*
+			    </div>
+			 */}
                         <div className={classes.deleteDialogMessage}>
                             <div style={{ marginBottom: '5px' }}>
                                 You are about to permanently delete the
@@ -318,7 +319,6 @@ export default function RepoManage(props) {
                                 </>
                             )}
                             </div>
-			 */}
                     </div>
                 ) : (
                     <div className={classes.formWrapper}>
@@ -343,7 +343,7 @@ export default function RepoManage(props) {
                             <label htmlFor='alias'>Alias</label>
                             <input
                                 className='form-control is-invalid'
-                                placeholder='Alias for the repository, e.g."Server 1"'
+                                placeholder='Alias for the repository. Needs to be FQDN for none-internal client hosts.'
                                 type='text'
                                 defaultValue={
                                     props.mode == 'edit'
