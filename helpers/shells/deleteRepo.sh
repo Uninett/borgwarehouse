@@ -5,7 +5,8 @@
 # This shell **delete the repository** in arg and **all his data** and the line associated in the authorized_keys file.
 
 # DISABLED (until authentiation is improved) 2024-01-30 Otto J Wittner
-if [ $1 != "add-reponame-to-delete-here" ]; then
+if [ "$1" != "add-reponame-to-delete-here" ]; then
+#if [ "$1" != "20ce5d38" ]; then
     echo -n "This feature is disabled"; exit 2
 fi
 # Exit when any command fails
@@ -53,12 +54,12 @@ fi
 
 HOSTNAME=$2
 # Clean up firewall if client hostname is given
-if [ $HOSTNAME ]; then
-    RULENUMS=`sudo ufw status numbered | grep "SSH from $HOSTNAME" | cut -f2 -d "[" | cut -f1 -d"]" | sort -nr`
+if [ "$HOSTNAME" ]; then
+    RULENUMS=$(sudo ufw status numbered | grep "SSH from $HOSTNAME" | cut -f2 -d "[" | cut -f1 -d"]" | sort -nr)
     for r in $RULENUMS; do
 	UFW_CMD="$UFW_CMD sudo ufw --force delete $r; "
     done
     # Run ufw command
-    bash -c "$UFW_CMD" 2>&1 >/dev/null
+    { bash -c "$UFW_CMD" >/dev/null ; } 2>&1 
 fi
 
