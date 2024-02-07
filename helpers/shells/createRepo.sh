@@ -79,26 +79,26 @@ echo "$restricted_authkeys" | tee -a "${authorized_keys}" >/dev/null
 
 ## If FQDN is given, attempte to add firewall rule
 HOSTNAME=$3
-if [ $HOSTNAME ]; then
-    RULENUMS=`sudo ufw status numbered | grep "SSH from $HOSTNAME" | cut -f2 -d "[" | cut -f1 -d"]" | sort -nr`
+if [ "$HOSTNAME" ]; then
+    RULENUMS=$(sudo ufw status numbered | grep "SSH from $HOSTNAME" | cut -f2 -d "[" | cut -f1 -d"]" | sort -nr)
     if [ -z "$RULENUMS" ]; then
 	# No firewall rules found for host. Proceed with adding.
 	
 	# Get IP addresses
-	IP4=`host $HOSTNAME | grep "has address" | awk '{ print $4 }'`  
-	IP6=`host $HOSTNAME | grep "has IPv6 address" | awk '{ print $5 }'`  
+	IP4=$(host "$HOSTNAME" | grep "has address" | awk '{ print $4 }')  
+	IP6=$(host "$HOSTNAME" | grep "has IPv6 address" | awk '{ print $5 }')  
 	
-	if [ $IP4 ]; then
+	if [ "$IP4" ]; then
 	    # Add allow statement
 	    UFW_CMD="$UFW_CMD sudo ufw allow proto tcp from $IP4 to any port 22 comment 'SSH from $HOSTNAME'; "
 	fi		  
-	if [ $IP6 ]; then
+	if [ "$IP6" ]; then
 	    # Add allow statement
 	    UFW_CMD="$UFW_CMD sudo ufw allow proto tcp from $IP6 to any port 22 comment 'SSH from $HOSTNAME'"
 	fi		  
-	#T=`date -Iseconds`; echo "$T Running: $UFW_CMD" >> /tmp/bw.log
+	#T=$(date -Iseconds); echo "$T Running: $UFW_CMD" >> /tmp/bw.log
 	# Run ufw command
-	bash -c "$UFW_CMD" 2>&1 >/dev/null
+	{ bash -c "$UFW_CMD" >/dev/null ; } 2>&1
     fi    
 fi
 
