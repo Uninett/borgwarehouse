@@ -112,3 +112,6 @@ config/users.json
 
 # docker files
 docker-compose.yml
+
+# emacs backup-files
+*~

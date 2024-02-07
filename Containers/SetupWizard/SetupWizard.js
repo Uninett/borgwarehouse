@@ -98,7 +98,10 @@ function SetupWizard(props) {
     //Change Step with State
     const wizardStep = (step) => {
         if (step == 1) {
-            return <WizardStep1 />;
+            return <WizardStep1
+		       selectedOption={selectedOption}
+                       wizardEnv={wizardEnv}
+		   />;
         } else if (step == 2) {
             return (
                 <WizardStep2
@@ -149,8 +152,8 @@ function SetupWizard(props) {
                         },
                     })}
                 />
+		or <a href="/manage-repo/add">add a new repository</a> 
             </div>
-
             {wizardStep(step)}
         </div>
     );

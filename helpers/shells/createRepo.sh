@@ -15,6 +15,9 @@
 
 # Limitation : all SSH pubkey are unique : https://github.com/borgbackup/borg/issues/7757
 
+# Change log:
+#  2024-01-31 Otto J Wittner: Added firewall management via "ufw"
+
 # Exit when any command fails
 set -e
 
@@ -32,7 +35,8 @@ authorized_keys="${home}/.ssh/authorized_keys"
 
 # Check args
 if [ "$1" == "" ] || [ "$2" == "" ];then
-    echo -n "This shell takes 2 arguments : SSH Public Key, Quota in Go [e.g. : 10] "
+#    echo -n "This shell takes 2 arguments : SSH Public Key, Quota in Go [e.g. : 10] "
+    echo -n "This shell takes at least 2 arguments : SSH Public Key, Quota in Go [e.g. : 10]. Client FQDN may set a arg no 3 [e.g. my.domain.org ]. "
     exit 1
 fi
 
@@ -70,8 +74,33 @@ if [ ! -f "${authorized_keys}" ];then
 fi
 
 ## Add ssh public key in authorized_keys with borg restriction for only 1 repository and storage quota
-restricted_authkeys="command=\"cd ${pool};borg serve --restrict-to-path ${pool}/${repositoryName} --storage-quota $2G\",restrict $1"
+restricted_authkeys="command=\"cd ${pool};borg serve --append-only --restrict-to-path ${pool}/${repositoryName} --storage-quota $2G\",restrict $1"
 echo "$restricted_authkeys" | tee -a "${authorized_keys}" >/dev/null
+
+## If FQDN is given, attempte to add firewall rule
+HOSTNAME=$3
+if [ "$HOSTNAME" ]; then
+    RULENUMS=$(sudo ufw status numbered | grep "SSH from $HOSTNAME" | cut -f2 -d "[" | cut -f1 -d"]" | sort -nr)
+    if [ -z "$RULENUMS" ]; then
+	# No firewall rules found for host. Proceed with adding.
+	
+	# Get IP addresses
+	IP4=$(host "$HOSTNAME" | grep "has address" | awk '{ print $4 }')  
+	IP6=$(host "$HOSTNAME" | grep "has IPv6 address" | awk '{ print $5 }')  
+	
+	if [ "$IP4" ]; then
+	    # Add allow statement
+	    UFW_CMD="$UFW_CMD sudo ufw allow proto tcp from $IP4 to any port 22 comment 'SSH from $HOSTNAME'; "
+	fi		  
+	if [ "$IP6" ]; then
+	    # Add allow statement
+	    UFW_CMD="$UFW_CMD sudo ufw allow proto tcp from $IP6 to any port 22 comment 'SSH from $HOSTNAME'"
+	fi		  
+	#T=$(date -Iseconds); echo "$T Running: $UFW_CMD" >> /tmp/bw.log
+	# Run ufw command
+	{ bash -c "$UFW_CMD" >/dev/null ; } 2>&1
+    fi    
+fi
 
 ## Return the repositoryName
 echo "${repositoryName}"

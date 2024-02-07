@@ -66,8 +66,9 @@ export default async function handler(req, res) {
             //Find the absolute path of the shells directory
             const shellsDirectory = path.join(process.cwd(), '/helpers');
             //Exec the shell
+	    // (Include alias, assuming it is the client's fqdn, to manage firewall rules)
             const { stdout } = await exec(
-                `${shellsDirectory}/shells/createRepo.sh "${newRepo.sshPublicKey}" ${newRepo.storageSize}`
+                `${shellsDirectory}/shells/createRepo.sh "${newRepo.sshPublicKey}" ${newRepo.storageSize} "${newRepo.alias}"`
             );
 
             newRepo.repositoryName = stdout.trim();

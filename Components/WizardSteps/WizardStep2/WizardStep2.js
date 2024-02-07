@@ -21,6 +21,27 @@ function WizardStep2(props) {
                 <IconTool className={classes.icon} />
                 Initialize a repository
             </h1>
+            <h2>Borgmatic</h2>
+            <div className={classes.description}>
+                If you are using Borgmatic, make sure a <a href="1#config">config file</a>
+		is ready in <i>/etc/borgmatic/config.yaml</i> and then run
+                <br />
+                <div
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                    }}
+                >
+                    <div className={classes.code}>
+                        borgmatic init -e repokey-blake2
+                    </div>
+                    <CopyButton dataToCopy='borgmatic init -e repokey-blake2' />
+                </div>
+            </div>
+
+            <div className={classes.separator}></div>
+            <h2>Borg</h2>
             <div className={classes.description}>
                 To initialize your repository with borgbackup :
                 <br />
@@ -32,12 +53,14 @@ function WizardStep2(props) {
                     }}
                 >
                     <div className={classes.code}>
-                        borg init -e repokey-blake2 ssh://
+                        BORG_NEW_PASSPHRASE=`mkdir -p /etc/borg; openssl rand -base64 40 |
+			tee /etc/borg/{props.selectedOption.repositoryName}-repo.key` \ <br/>
+			borg init -e repokey-blake2 ssh://
                         {UNIX_USER}@{FQDN}:{SSH_SERVER_PORT}/./
                         {props.selectedOption.repositoryName}
                     </div>
                     <CopyButton
-                        dataToCopy={`borg init -e repokey-blake2 ssh://${UNIX_USER}@${FQDN}:${SSH_SERVER_PORT}/./${props.selectedOption.repositoryName}`}
+                        dataToCopy={`BORG_NEW_PASSPHRASE=\`mkdir -p /etc/borg; openssl rand -base64 40 | tee /etc/borg/${props.selectedOption.repositoryName}-repo.key\` borg init -e repokey-blake2 ssh://${UNIX_USER}@${FQDN}:${SSH_SERVER_PORT}/./${props.selectedOption.repositoryName}`}
                     />
                 </div>
                 <div className={classes.note}>
@@ -54,25 +77,6 @@ function WizardStep2(props) {
                 </div>
             </div>
 
-            <div className={classes.separator}></div>
-            <h2>Borgmatic</h2>
-            <div className={classes.description}>
-                If you are using Borgmatic and have <b>already edited</b> the
-                (find a sample on the step 4) :
-                <br />
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'flex-start',
-                    }}
-                >
-                    <div className={classes.code}>
-                        borg init -e repokey-blake2
-                    </div>
-                    <CopyButton dataToCopy='borg init -e repokey-blake2' />
-                </div>
-            </div>
 
             <h2>Vorta</h2>
             <div className={classes.description}>

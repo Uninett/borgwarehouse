@@ -1,6 +1,8 @@
 //Lib
 import classes from './RepoManage.module.css';
-import { IconAlertCircle, IconX } from '@tabler/icons-react';
+import classes_repo from '../../Components/Repo/Repo.module.css';
+import classes_wizard from '../../Components/WizardSteps/WizardStep1/WizardStep1.module.css';
+import { IconAlertCircle, IconInfoCircle, IconX } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
@@ -47,6 +49,8 @@ export default function RepoManage(props) {
         progress: undefined,
     };
 
+    const sshkeygen_cmd ='sudo ssh-keygen -q -t rsa -b 4096 -N "" -C "root@$(hostname --fqdn)" <<< $\'\\ny\' >/dev/null 2>&1'
+    
     ////State
     const [deleteDialog, setDeleteDialog] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -271,6 +275,11 @@ export default function RepoManage(props) {
                                 ?
                             </h1>
                         </div>
+			{/*
+			<div>
+			    Contact backup system admin to delete repos.
+			    </div>
+			 */}
                         <div className={classes.deleteDialogMessage}>
                             <div style={{ marginBottom: '5px' }}>
                                 You are about to permanently delete the
@@ -309,7 +318,7 @@ export default function RepoManage(props) {
                                     </button>
                                 </>
                             )}
-                        </div>
+                            </div>
                     </div>
                 ) : (
                     <div className={classes.formWrapper}>
@@ -334,7 +343,7 @@ export default function RepoManage(props) {
                             <label htmlFor='alias'>Alias</label>
                             <input
                                 className='form-control is-invalid'
-                                placeholder='Alias for the repository, e.g."Server 1"'
+                                placeholder='Alias for the repository. Needs to be FQDN for none-internal client hosts.'
                                 type='text'
                                 defaultValue={
                                     props.mode == 'edit'
@@ -353,6 +362,7 @@ export default function RepoManage(props) {
                                     },
                                 })}
                             />
+
                             {errors.alias && (
                                 <span className={classes.errorMessage}>
                                     {errors.alias.message}
@@ -360,6 +370,19 @@ export default function RepoManage(props) {
                             )}
                             {/* SSH KEY */}
                             <label htmlFor='sshkey'>SSH public key</label>
+			    <div className={classes_repo.openFlex}>
+                            <div  className={classes_repo.comment} >
+                                <IconInfoCircle size={16} color='grey' />
+                                <div className={classes_repo.toolTip}>
+                                    Borgbackup relies on ssh for transport hence and ssh key pair is required.
+	      			    Generate a client side keypair for the <i>root</i> (in /root/.ssh) by applying<br />
+				    <div className={classes_wizard.code}>
+					{sshkeygen_cmd}
+				    </div><br />
+				    Copy and past the resulting public key found in <i>/root/.ssh/id_rsa.pub</i> in here
+                                </div>
+                            </div>
+			    </div>
                             <textarea
                                 placeholder='Public key in OpenSSH format (rsa, ed25519, ed25519-sk)'
                                 type='text'
@@ -383,7 +406,7 @@ export default function RepoManage(props) {
                                 </span>
                             )}
                             {/* SIZE */}
-                            <label htmlFor='size'>Storage Size (Go)</label>
+                            <label htmlFor='size'>Storage Size (Giga bytes)</label>
                             <input
                                 type='number'
                                 min='1'
@@ -425,6 +448,7 @@ export default function RepoManage(props) {
                                 </span>
                             )}
                             {/* LAN COMMAND GENERATION */}
+			    {/*
                             <div className={classes.lanCommandWrapper}>
                                 <input
                                     type='checkbox'
@@ -453,7 +477,8 @@ export default function RepoManage(props) {
                                         color='#6c737f'
                                     />
                                 </Link>
-                            </div>
+				</div>
+			     */}
                             {/* ALERT */}
                             <label
                                 style={{ margin: '25px auto 10px auto' }}
@@ -527,7 +552,7 @@ export default function RepoManage(props) {
                                 className={classes.littleDeleteButton}
                                 onClick={() => setDeleteDialog(true)}
                             >
-                                Delete this repository
+                               Delete this repository
                             </button>
                         ) : null}
                     </div>
